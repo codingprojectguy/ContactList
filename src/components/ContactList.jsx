@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import ContactRow from "./ContactRow";
 
 const url = "https://fsa-jsonplaceholder-69b5c48f1259.herokuapp.com/users";
 

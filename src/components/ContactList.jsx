@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ContactRow from "./ContactRow";
+
 const url = "https://fsa-jsonplaceholder-69b5c48f1259.herokuapp.com/users";
 
 const dummyContacts = [
@@ -10,6 +11,7 @@ const dummyContacts = [
 
 const ContactList = () => {
   const [contacts, setContacts] = useState(dummyContacts);
+  const [selectedContactId, setSelectedContactId] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,24 +27,68 @@ const ContactList = () => {
     fetchData();
   }, []);
 
+  const selectedUser = contacts.find(
+    (contact) => contact.id === selectedContactId
+  );
+  console.log(selectedUser);
+
   return (
-    <table>
-      <thead>
-        <tr>
-          <th colSpan="3">Contact List</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Name</td>
-          <td>Email</td>
-          <td>Phone</td>
-        </tr>
-        {contacts.map((contact) => {
-          return <ContactRow key={contact.id} contact={contact} />;
-        })}
-      </tbody>
-    </table>
+    <div className="App">
+      {selectedContactId ? (
+        <div
+          onClick={() => {
+            setSelectedContactId(!selectedContactId);
+          }}
+          className="user"
+        >
+          <h2>{selectedUser.name}</h2>
+          <ul>
+            <li>Username: {selectedUser.username}</li>
+            <li>Email: {selectedUser.email}</li>
+            <li>Phone: {selectedUser.phone}</li>
+            <li>Website: {selectedUser.website}</li>
+            <li>
+              Address: {selectedUser.address.street},{" "}
+              {selectedUser.address.suite}, {selectedUser.address.city},{" "}
+              {selectedUser.address.zipcode}
+            </li>
+          </ul>
+        </div>
+      ) : (
+        <div className="user">
+          <table>
+            <thead>
+              <tr>
+                <th colSpan="3">Contact List</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Name</td>
+                <td>Email</td>
+                <td>Phone</td>
+              </tr>
+              {contacts.map((contact) => {
+                return (
+                  <>
+                    <tr
+                      key={contact.id}
+                      onClick={() => {
+                        setSelectedContactId(contact.id);
+                      }}
+                    >
+                      <td>{contact.name}</td>
+                      <td>{contact.email}</td>
+                      <td>{contact.phone}</td>
+                    </tr>
+                  </>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
   );
 };
 

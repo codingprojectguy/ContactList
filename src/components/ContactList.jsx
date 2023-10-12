@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ContactRow from "./ContactRow";
+const url = "https://fsa-jsonplaceholder-69b5c48f1259.herokuapp.com/users";
 
 const dummyContacts = [
   { id: 1, name: "R2-D2", phone: "222-222-2222", email: "r2d2@droids.com" },
@@ -9,6 +10,21 @@ const dummyContacts = [
 
 const ContactList = () => {
   const [contacts, setContacts] = useState(dummyContacts);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(url);
+        const users = await response.json();
+        console.log(users);
+        setContacts(users);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
     <table>
       <thead>
